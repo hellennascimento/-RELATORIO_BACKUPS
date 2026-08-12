@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitoramento de Backups</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; padding: 20px; color: #333; }
+        .container { max-width: 1200px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; font-size: 24px; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        .update-time { font-size: 14px; color: #7f8c8d; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #3498db; color: #ffffff; text-transform: uppercase; }
+        tr:hover { background-color: #f5f5f5; }
+        .status-ok { color: #27ae60; font-weight: bold; }
+        .status-error { color: #c0392b; font-weight: bold; }
+        .status-warning { color: #f39c12; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard de Backups - Acronis</h1>
+        <div class="update-time">Última atualização: 12/08/2026 às 11:55:25</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Cliente (Recurso)</th>
+                    <th>Tipo</th>
+                    <th>Status</th>
+                    <th>Último Backup</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <td>Arpoador</td>
+                    <td>resource.machine</td>
+                    <td class="status-warning">IDLE</td>
+                    <td>2026-08-11T17:38:33.054446897Z</td>
+                </tr>
+                <tr>
+                    <td>Desktop</td>
+                    <td>resource.machine</td>
+                    <td class="status-error">ERROR</td>
+                    <td>2026-08-11T17:21:02.068651909Z</td>
+                </tr>
+                <tr>
+                    <td>servidor.anais.intranet</td>
+                    <td>resource.machine</td>
+                    <td class="status-error">CRITICAL</td>
+                    <td>2024-03-20T23:32:41.031812098Z</td>
+                </tr>
+                <tr>
+                    <td>SISTEMAS.confiare.intranet</td>
+                    <td>resource.machine</td>
+                    <td class="status-warning">IDLE</td>
+                    <td>2023-05-04T04:09:50.087805599Z</td>
+                </tr>
+                <tr>
+                    <td>SISTEMAS1.confiare.intranet</td>
+                    <td>resource.machine</td>
+                    <td class="status-warning">NO_POLICIES_APPLIED</td>
+                    <td>2023-05-04T00:15:37.004772003Z</td>
+                </tr>
+                <tr>
+                    <td>SERVIDOR1.confiare.intranet</td>
+                    <td>resource.machine</td>
+                    <td class="status-error">ERROR</td>
+                    <td>2023-05-02T00:35:47.045961817Z</td>
+                </tr>
+                <tr>
+                    <td>SERVIDOR1.escon.intranet</td>
+                    <td>resource.machine</td>
+                    <td class="status-warning">IDLE</td>
+                    <td>2023-06-21T23:21:25.063052409Z</td>
+                </tr>
+                <tr>
+                    <td>SISTEMAS.escon.intranet</td>
+                    <td>resource.machine</td>
+                    <td class="status-error">ERROR</td>
+                    <td>2024-02-14T04:16:55.057876513Z</td>
+                </tr>
+                <tr>
+                    <td>SERVIDOR1.jrx.intranet</td>
+                    <td>resource.machine</td>
+                    <td class="status-error">CRITICAL</td>
+                    <td>2024-06-01T02:58:32.093723153Z</td>
+                </tr>
+                <tr>
+                    <td>SERVIDOR1.kehome.intranet</td>
+                    <td>resource.machine</td>
+                    <td class="status-warning">IDLE</td>
+                    <td>2026-08-12T00:42:07.035836766Z</td>
+                </tr>
+                <tr>
+                    <td>SISTEMAS.kehome.intranet</td>
+                    <td>resource.machine</td>
+                    <td class="status-warning">IDLE</td>
+                    <td>2026-08-12T02:19:56.053675223Z</td>
+                </tr>
+                <tr>
+                    <td>SISTEMAS.poquet.local</td>
+                    <td>resource.machine</td>
+                    <td class="status-error">CRITICAL</td>
+                    <td>2026-06-13T02:25:38.080410722Z</td>
+                </tr>
+                <tr>
+                    <td>SERVIDOR1.orgalexandre.local</td>
+                    <td>resource.machine</td>
+                    <td class="status-error">CRITICAL</td>
+                    <td>2023-10-21T02:02:57.00051358Z</td>
+                </tr>
+                <tr>
+                    <td>SERVIDOR1.poquet.local</td>
+                    <td>resource.machine</td>
+                    <td class="status-error">CRITICAL</td>
+                    <td>2026-06-13T00:21:10.0807685Z</td>
+                </tr>
+                <tr>
+                    <td>SERVIDOR1.jcom.intranet</td>
+                    <td>resource.machine</td>
+                    <td class="status-error">CRITICAL</td>
+                    <td>2025-01-14T01:59:01.000682041Z</td>
+                </tr>
+                <tr>
+                    <td>SISTEMAS.jcom.intranet</td>
+                    <td>resource.machine</td>
+                    <td class="status-error">CRITICAL</td>
+                    <td>2022-07-27T00:24:09Z</td>
+                </tr>
+                <tr>
+                    <td>SISTEMAS2.jcom.intranet</td>
+                    <td>resource.machine</td>
+                    <td class="status-error">CRITICAL</td>
+                    <td>2025-01-14T00:50:01.092176318Z</td>
+                </tr>
+                <tr>
+                    <td>SERVIDOR2.jcom.intranet</td>
+                    <td>resource.machine</td>
+                    <td class="status-error">CRITICAL</td>
+                    <td>2025-01-14T00:48:22.066344868Z</td>
+                </tr>
+                <tr>
+                    <td>5asec-Ipanema</td>
+                    <td>resource.machine</td>
+                    <td class="status-warning">WARNING</td>
+                    <td>2026-02-12T17:28:36.088986349Z</td>
+                </tr>
+                <tr>
+                    <td>5ASECSAENSPENA</td>
+                    <td>resource.machine</td>
+                    <td class="status-error">CRITICAL</td>
+                    <td>2024-07-22T17:01:04.08595466Z</td>
+                </tr>
+                <tr>
+                    <td>SERVIDORST</td>
+                    <td>resource.machine</td>
+                    <td class="status-warning">IDLE</td>
+                    <td>2026-08-11T17:30:21.060340389Z</td>
+                </tr>
+                <tr>
+                    <td>mssql://mssqlserver/base_ke@0062c8e1-01cf-4dbc-9df6-b39756b312f6</td>
+                    <td>resource.mssql_database</td>
+                    <td class="status-warning">IDLE</td>
+                    <td>2026-08-11T22:16:56.028368363Z</td>
+                </tr>
+                <tr>
+                    <td>mssql://mssqlserver/alterdata@0062c8e1-01cf-4dbc-9df6-b39756b312f6</td>
+                    <td>resource.mssql_database</td>
+                    <td class="status-warning">IDLE</td>
+                    <td>2026-08-11T22:16:56.020271769Z</td>
+                </tr>
+                <tr>
+                    <td>mssql://mssqlserver@0062c8e1-01cf-4dbc-9df6-b39756b312f6</td>
+                    <td>resource.mssql_database_folder</td>
+                    <td class="status-warning">IDLE</td>
+                    <td>2026-08-11T22:16:56.051913803Z</td>
+                </tr>
+                <tr>
+                    <td>SERVIDOR1.mapa.intranet</td>
+                    <td>resource.machine</td>
+                    <td class="status-error">CRITICAL</td>
+                    <td>2024-08-27T17:10:48.029764473Z</td>
+                </tr>
+                <tr>
+                    <td>NC-NTB-05</td>
+                    <td>resource.machine</td>
+                    <td class="status-warning">WARNING</td>
+                    <td>2023-04-13T15:48:34.040681056Z</td>
+                </tr>
+                <tr>
+                    <td>NC-NTB-002</td>
+                    <td>resource.machine</td>
+                    <td class="status-warning">WARNING</td>
+                    <td>2023-04-05T12:47:03.067382049Z</td>
+                </tr>
+                <tr>
+                    <td>SRV-S-TSW2016.simel.simel</td>
+                    <td>resource.machine</td>
+                    <td class="status-warning">WARNING</td>
+                    <td>2026-08-12T06:14:32.002663155Z</td>
+                </tr>
+                <tr>
+                    <td>SERVIDOR1.Nogueira.intranet</td>
+                    <td>resource.machine</td>
+                    <td class="status-warning">RUNNING</td>
+                    <td>2026-08-11T20:25:33.060295098Z</td>
+                </tr>
+                <tr>
+                    <td>5asec-leblon</td>
+                    <td>resource.machine</td>
+                    <td class="status-warning">IDLE</td>
+                    <td>2026-08-11T17:24:04.02548838Z</td>
+                </tr>
+                <tr>
+                    <td>SERV-ESTOQUE</td>
+                    <td>resource.machine</td>
+                    <td class="status-warning">IDLE</td>
+                    <td>2026-08-12T01:26:51.047034659Z</td>
+                </tr>
+                <tr>
+                    <td>NewServStation2</td>
+                    <td>resource.machine</td>
+                    <td class="status-warning">WARNING</td>
+                    <td>2026-08-11T23:58:48.081242111Z</td>
+                </tr>
+                <tr>
+                    <td>SERVER-LG</td>
+                    <td>resource.machine</td>
+                    <td class="status-warning">IDLE</td>
+                    <td>2026-08-12T02:49:18.066575674Z</td>
+                </tr>
+                <tr>
+                    <td>DATAVENIA02</td>
+                    <td>resource.machine</td>
+                    <td class="status-warning">IDLE</td>
+                    <td>2026-08-12T01:38:53.081256491Z</td>
+                </tr>
+                <tr>
+                    <td>SERVIDOR1.frasopi.local</td>
+                    <td>resource.machine</td>
+                    <td class="status-error">CRITICAL</td>
+                    <td>2024-03-15T04:19:14.023659432Z</td>
+                </tr>
+                <tr>
+                    <td>SRV-AD.CARMAN.CORP</td>
+                    <td>resource.machine</td>
+                    <td class="status-warning">IDLE</td>
+                    <td>2026-08-12T01:58:25.022524971Z</td>
+                </tr>
+                <tr>
+                    <td>Sistemas.mapa.intranet</td>
+                    <td>resource.machine</td>
+                    <td class="status-error">CRITICAL</td>
+                    <td>2024-08-07T23:01:20.073433629Z</td>
+                </tr>
+                <tr>
+                    <td>SERVIDOR1.ocacontabil.local</td>
+                    <td>resource.machine</td>
+                    <td class="status-error">ERROR</td>
+                    <td>2026-08-12T02:38:43.070695643Z</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
