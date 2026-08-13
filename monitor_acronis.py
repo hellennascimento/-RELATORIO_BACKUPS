@@ -820,22 +820,22 @@ def gerar_html(dados_backups):
             <div class="kpi-card kpi-total">
                 <div class="kpi-title">Clientes Monitorados</div>
                 <div class="kpi-value" id="kpiClientes">-</div>
-                <div class="kpi-desc">Total de sub-tenants ativos</div>
+                <div class="kpi-desc">Clientes com backups configurados</div>
             </div>
             <div class="kpi-card kpi-total" style="--accent-color: #818cf8;">
                 <div class="kpi-title">Total de Backups</div>
                 <div class="kpi-value" id="kpiTotal">-</div>
-                <div class="kpi-desc">Recursos protegidos monitorados</div>
+                <div class="kpi-desc">Total de backups monitorados</div>
             </div>
             <div class="kpi-card kpi-success">
                 <div class="kpi-title">Backups OK</div>
                 <div class="kpi-value" id="kpiSuccess" style="color: #10b981;">-</div>
-                <div class="kpi-desc" id="kpiSuccessPerc">-% do total</div>
+                <div class="kpi-desc">Planos executados com sucesso</div>
             </div>
             <div class="kpi-card kpi-danger">
                 <div class="kpi-title">Erros / Falhas</div>
                 <div class="kpi-value" id="kpiDanger" style="color: #ef4444;">-</div>
-                <div class="kpi-desc" id="kpiDangerPerc">-% do total</div>
+                <div class="kpi-desc">Falhas encontradas nas últimas execuções</div>
             </div>
             <div class="kpi-card kpi-warning">
                 <div class="kpi-title">Alertas / Atrasados</div>
@@ -1219,12 +1219,6 @@ def gerar_html(dados_backups):
             document.getElementById("kpiSuccess").textContent = success;
             document.getElementById("kpiDanger").textContent = danger;
             document.getElementById("kpiWarning").textContent = warningsCount;
-
-            const successPerc = total > 0 ? Math.round((success / total) * 100) : 0;
-            const dangerPerc = total > 0 ? Math.round((danger / total) * 100) : 0;
-
-            document.getElementById("kpiSuccessPerc").textContent = `${{successPerc}}% do total`;
-            document.getElementById("kpiDangerPerc").textContent = `${{dangerPerc}}% do total`;
         }}
 
         // Navegação de páginas
