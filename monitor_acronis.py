@@ -115,8 +115,12 @@ def processar_dados(recursos):
     
     for item in recursos:
         policies = item.get('policies', [])
-        # Procuramos apenas recursos que tenham política de backup ativa
-        politica_backup = next((p for p in policies if 'backup' in p.get('type', '').lower()), None)
+        # Seleção inteligente da política de backup, preferindo a oficial policy.backup.machine
+        politica_backup = next((p for p in policies if p.get('type', '').lower().startswith('policy.backup')), None)
+        if not politica_backup:
+            politica_backup = next((p for p in policies if 'backup' in p.get('type', '').lower() and p.get('type') != 'copyingBackup'), None)
+            if not politica_backup:
+                politica_backup = next((p for p in policies if 'backup' in p.get('type', '').lower()), None)
         
         if not politica_backup:
             continue
@@ -124,7 +128,7 @@ def processar_dados(recursos):
         ctx = item.get('context', {})
         tipo_recurso = ctx.get('type', 'N/A')
         
-        # Filtro e extração do plano de backup
+        # Filtro e extração dos planos de backup
         nomes_planos = item.get('aggregate', {}).get('names', '')
         planos_brutos = [p.strip() for p in nomes_planos.split(';')] if nomes_planos else []
         planos_backup = [p for p in planos_brutos if is_backup_plan_name(p)]
@@ -133,7 +137,6 @@ def processar_dados(recursos):
         if not planos_backup:
             continue
             
-        plano = " / ".join(planos_backup)
         nome_recurso = ctx.get('name', 'Desconhecido')
         tenant_name = ctx.get('tenant_name', '')
         
@@ -161,17 +164,19 @@ def processar_dados(recursos):
         ultimo_sucesso = politica_backup.get('last_success_run')
         proximo_backup = politica_backup.get('next_run')
         
-        dados_processados.append({
-            "cliente": cliente,
-            "recurso": nome_recurso,
-            "tipo_recurso": tipo_recurso,
-            "categoria": categoria,
-            "status": status,
-            "status_bruto": status_bruto.lower(),
-            "plano": plano,
-            "ultimo_backup": ultimo_sucesso,
-            "proximo_backup": proximo_backup
-        })
+        # Criar uma linha separada para cada plano de backup ativo do recurso
+        for plano in planos_backup:
+            dados_processados.append({
+                "cliente": cliente,
+                "recurso": nome_recurso,
+                "tipo_recurso": tipo_recurso,
+                "categoria": categoria,
+                "status": status,
+                "status_bruto": status_bruto.lower(),
+                "plano": plano,
+                "ultimo_backup": ultimo_sucesso,
+                "proximo_backup": proximo_backup
+            })
         
     return dados_processados
 
@@ -835,7 +840,7 @@ def gerar_html(dados_backups):
             <div class="kpi-card kpi-warning">
                 <div class="kpi-title">Alertas / Atrasados</div>
                 <div class="kpi-value" id="kpiWarning" style="color: #f59e0b;">-</div>
-                <div class="kpi-desc" id="kpiWarningDesc">Ociosos ou sem rodar > 24h</div>
+                <div class="kpi-desc" id="kpiWarningDesc">Ociosos ou sem rodar >= 3 dias</div>
             </div>
         </div>
 
@@ -1140,14 +1145,14 @@ def gerar_html(dados_backups):
                 
                 const statusBadge = `<span class="badge ${{badgeClass}}"><span class="badge-dot"></span>${{item.status.toUpperCase()}}</span>`;
                 
-                // Cálculo de Backup Atrasado (> 24 horas)
+                // Cálculo de Backup Atrasado (>= 3 dias)
                 let dateDisplay = formatDateTime(item.ultimo_backup);
                 let relativeDisplay = getRelativeTime(item.ultimo_backup);
                 let isStale = false;
                 
                 if (item.ultimo_backup) {{
                     const diffHours = (new Date() - new Date(item.ultimo_backup)) / 3600000;
-                    if (diffHours > 24) {{
+                    if (diffHours >= 72) {{
                         isStale = true;
                     }}
                 }} else {{
@@ -1194,14 +1199,14 @@ def gerar_html(dados_backups):
             const success = BACKUP_DATA.filter(d => d.status === 'Sucesso').length;
             const danger = BACKUP_DATA.filter(d => d.status === 'Falha').length;
             
-            // Calculo de alertas considerando ociosidade do status E backups atrasados > 24 horas
+            // Calculo de alertas considerando ociosidade do status E backups atrasados >= 3 dias
             let warningsCount = 0;
             BACKUP_DATA.forEach(d => {{
                 if (d.status === 'Alerta') {{
                     warningsCount++;
                 }} else if (d.ultimo_backup) {{
                     const diffHours = (new Date() - new Date(d.ultimo_backup)) / 3600000;
-                    if (diffHours > 24 && d.status !== 'Falha') {{
+                    if (diffHours >= 72 && d.status !== 'Falha') {{
                         warningsCount++;
                     }}
                 }} else {{
