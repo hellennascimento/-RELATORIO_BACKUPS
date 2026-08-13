@@ -10,8 +10,21 @@ CONFIG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.j
 OUTPUT_HTML = os.path.join(os.path.dirname(os.path.abspath(__file__)), "index.html")
 
 def carregar_config():
+    # Tenta primeiro ler as variáveis de ambiente (útil para GitHub Actions)
+    env_client_id = os.environ.get("ACRONIS_CLIENT_ID")
+    env_client_secret = os.environ.get("ACRONIS_CLIENT_SECRET")
+    env_datacenter_url = os.environ.get("ACRONIS_DATACENTER_URL")
+    
+    if env_client_id and env_client_secret and env_datacenter_url:
+        return {
+            "client_id": env_client_id,
+            "client_secret": env_client_secret,
+            "datacenter_url": env_datacenter_url
+        }
+        
+    # Fallback para o arquivo local config.json
     if not os.path.exists(CONFIG_FILE):
-        raise FileNotFoundError(f"Arquivo de configuração '{CONFIG_FILE}' não encontrado. Por favor, crie-o antes de executar.")
+        raise FileNotFoundError(f"Arquivo de configuração '{CONFIG_FILE}' não encontrado localmente e as variáveis de ambiente não foram definidas.")
     
     with open(CONFIG_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
