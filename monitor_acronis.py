@@ -301,7 +301,9 @@ def processar_dados_saas(activities):
     return dados_saas
 
 def gerar_html(dados_backups):
-    data_atualizacao = datetime.now().strftime("%d/%m/%Y às %H:%M:%S")
+    from datetime import datetime, timezone, timedelta
+    fuso_brasilia = timezone(timedelta(hours=-3))
+    data_atualizacao = datetime.now(timezone.utc).astimezone(fuso_brasilia).strftime("%d/%m/%Y às %H:%M:%S")
     json_dados = json.dumps(dados_backups, indent=2, ensure_ascii=False)
     
     html_content = f"""<!DOCTYPE html>
