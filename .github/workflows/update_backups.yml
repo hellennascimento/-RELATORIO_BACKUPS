@@ -33,6 +33,7 @@ jobs:
         ACRONIS_CLIENT_ID: ${{ secrets.ACRONIS_CLIENT_ID }}
         ACRONIS_CLIENT_SECRET: ${{ secrets.ACRONIS_CLIENT_SECRET }}
         ACRONIS_DATACENTER_URL: ${{ secrets.ACRONIS_DATACENTER_URL }}
+        TZ: America/Sao_Paulo
       run: python monitor_acronis.py
 
     - name: Salvar e Publicar alterações
