@@ -811,6 +811,77 @@ def gerar_html(dados_backups):
             .toolbar-row-2 {{ flex-direction: column; align-items: flex-start; }}
             .btn-export {{ width: 100%; justify-content: center; }}
         }}
+
+        .btn-export-group {{
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }}
+
+        .btn-export-pdf {{
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.35);
+            color: #f87171;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }}
+
+        .btn-export-pdf:hover {{
+            background: rgba(239, 68, 68, 0.2);
+        }}
+
+        @media print {{
+            body {{
+                background: #ffffff !important;
+                color: #0f172a !important;
+                padding: 0 !important;
+                font-size: 10px !important;
+            }}
+            .container {{ max-width: 100% !important; }}
+            header {{ border-bottom: 2px solid #e2e8f0 !important; }}
+            .header-controls, .toolbar, .pagination, .btn-export, .btn-export-group {{ display: none !important; }}
+            .kpi-container {{
+                display: grid !important;
+                grid-template-columns: repeat(5, 1fr) !important;
+                gap: 8px !important;
+                margin-bottom: 12px !important;
+            }}
+            .kpi-card {{
+                border: 1px solid #e2e8f0 !important;
+                background: #ffffff !important;
+                padding: 10px !important;
+                break-inside: avoid !important;
+            }}
+            .kpi-value {{ font-size: 18px !important; }}
+            .table-card {{
+                border: 1px solid #e2e8f0 !important;
+                box-shadow: none !important;
+                break-inside: auto !important;
+            }}
+            table {{ font-size: 9px !important; width: 100% !important; }}
+            th, td {{ padding: 6px 8px !important; border: 1px solid #e2e8f0 !important; }}
+            th {{ background: #f8fafc !important; color: #475569 !important; }}
+            td {{ color: #0f172a !important; }}
+            tr {{ break-inside: avoid !important; }}
+            .badge {{
+                border: 1px solid !important;
+                padding: 2px 6px !important;
+                font-size: 9px !important;
+                print-color-adjust: exact !important;
+                -webkit-print-color-adjust: exact !important;
+            }}
+            .badge-success {{ background: #d1fae5 !important; color: #065f46 !important; border-color: #a7f3d0 !important; }}
+            .badge-danger {{ background: #fee2e2 !important; color: #7f1d1d !important; border-color: #fca5a5 !important; }}
+            .badge-warning {{ background: #fef3c7 !important; color: #78350f !important; border-color: #fde68a !important; }}
+            .stale-text {{ color: #dc2626 !important; }}
+            h1 {{ font-size: 16px !important; color: #0f172a !important; -webkit-text-fill-color: #0f172a !important; }}
+        }}
     </style>
 </head>
 <body>
@@ -891,10 +962,16 @@ def gerar_html(dados_backups):
                         <button class="btn-filter" onclick="setStatusFilter('Alerta', this)">Alerta</button>
                     </div>
                 </div>
-                <button class="btn-export" onclick="exportToCSV()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-                    Exportar CSV
-                </button>
+                <div class="btn-export-group">
+                    <button class="btn-export" onclick="exportToCSV()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                        Exportar CSV
+                    </button>
+                    <button class="btn-export-pdf" onclick="exportToPDF()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+                        Exportar PDF
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -1300,6 +1377,28 @@ def gerar_html(dados_backups):
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+        }}
+
+        // Exportação PDF
+        function exportToPDF() {{
+            // Salva o estado atual da paginação
+            const savedPageSize = pageSize;
+            const savedPage = currentPage;
+            
+            // Exibe todos os registros para impressão
+            pageSize = 'all';
+            currentPage = 1;
+            renderDashboard();
+            
+            // Aguarda renderização e dispara impressão
+            setTimeout(() => {{
+                window.print();
+                
+                // Restaura o estado original após a impressão
+                pageSize = savedPageSize;
+                currentPage = savedPage;
+                renderDashboard();
+            }}, 300);
         }}
     </script>
 </body>
