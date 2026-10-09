@@ -71,6 +71,41 @@ def obter_status_recursos(datacenter_url, token):
     print(f"Total de recursos coletados: {len(recursos)}")
     return recursos
 
+def obter_planos_nao_backup(datacenter_url, token):
+    """Retorna os nomes (em maiúsculas) dos planos de gerenciamento que NÃO são backup:
+    planos de scripting, monitoramento e agente/acesso remoto (tipo raiz policy.management.*)."""
+    url = f"{datacenter_url}/api/policy_management/v4/policies"
+    headers = {'Authorization': f'Bearer {token}'}
+    params = {'limit': 1000}
+    nomes = set()
+
+    while True:
+        resposta = requests.get(url, headers=headers, params=params)
+        resposta.raise_for_status()
+        dados = resposta.json()
+        items = dados.get('items', [])
+
+        for it in items:
+            subs = it.get('policy', [])
+            if isinstance(subs, dict):
+                subs = [subs]
+            if not subs:
+                continue
+            # A política raiz (sem parent_ids) define o tipo do plano
+            raiz = next((s for s in subs if not s.get('parent_ids')), subs[0])
+            tipo = (raiz.get('type') or '').lower()
+            nome = (raiz.get('name') or '').strip()
+            if nome and tipo.startswith('policy.management.'):
+                nomes.add(nome.upper())
+
+        after = dados.get('paging', {}).get('cursors', {}).get('after')
+        if not after or not items:
+            break
+        params = {'limit': 1000, 'after': after}
+
+    print(f"Planos de gerenciamento (scripting/monitoramento/agente) ignorados: {len(nomes)}")
+    return nomes
+
 def clean_tenant_name(name):
     if not name or name == "0":
         return "Diversa Tecnologia (Principal)"
@@ -123,7 +158,8 @@ def is_backup_plan_name(name):
             return False
     return True
 
-def processar_dados(recursos):
+def processar_dados(recursos, planos_ignorados=None):
+    planos_ignorados = planos_ignorados or set()
     dados_processados = []
     
     for item in recursos:
@@ -144,7 +180,7 @@ def processar_dados(recursos):
         # Filtro e extração dos planos de backup
         nomes_planos = item.get('aggregate', {}).get('names', '')
         planos_brutos = [p.strip() for p in nomes_planos.split(';')] if nomes_planos else []
-        planos_backup = [p for p in planos_brutos if is_backup_plan_name(p)]
+        planos_backup = [p for p in planos_brutos if is_backup_plan_name(p) and p.upper() not in planos_ignorados]
         
         # Se não tiver nenhum plano de backup real associado, ignoramos o recurso
         if not planos_backup:
@@ -1424,10 +1460,17 @@ def main():
         return
 
     # 1. Obter recursos de workloads locais e virtuais (v4/resource_statuses)
+    # Lista de planos de scripting/monitoramento/agente a ignorar (falha aqui não interrompe o painel)
+    try:
+        planos_ignorados = obter_planos_nao_backup(config['datacenter_url'], token)
+    except Exception as e:
+        print(f"Aviso: não foi possível obter planos de gerenciamento a ignorar: {e}")
+        planos_ignorados = set()
+
     try:
         recursos = obter_status_recursos(config['datacenter_url'], token)
         print("Processando dados de backup (Workloads padrão)...")
-        dados_backups = processar_dados(recursos)
+        dados_backups = processar_dados(recursos, planos_ignorados)
         print(f"Total de recursos de backup padrão processados: {len(dados_backups)}")
     except Exception as e:
         print(f"Erro ao obter ou processar workloads padrão: {e}")
