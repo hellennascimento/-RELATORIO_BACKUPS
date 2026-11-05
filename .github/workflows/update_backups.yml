@@ -10,16 +10,21 @@ on:
 permissions:
   contents: write
 
+# Impede duas execuções simultâneas
+concurrency:
+  group: update-dashboard
+  cancel-in-progress: false
+
 jobs:
   update-dashboard:
     runs-on: ubuntu-latest
 
     steps:
     - name: Obter o código do repositório
-      uses: actions/checkout@v4
+      uses: actions/checkout@v5
 
     - name: Configurar o Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: '3.11'
 
@@ -43,4 +48,10 @@ jobs:
         git add index.html
         # Evita erro se não houver modificações nos arquivos
         git diff-index --quiet HEAD || git commit -m "Atualização automática de dados [skip ci]"
-        git push
+        # Tenta enviar até 3 vezes, sincronizando com o remoto antes de cada tentativa
+        for i in 1 2 3; do
+          git pull --rebase -X theirs origin main && git push && exit 0
+          echo "Push falhou (tentativa $i), aguardando para tentar novamente..."
+          sleep 15
+        done
+        exit 1
